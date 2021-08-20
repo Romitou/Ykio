@@ -103,8 +103,11 @@ func main() {
 			db.Delete(&image)
 			return
 		}
+
+		ctx.Header("X-Image-Date", image.CreatedAt.Format(time.RFC3339))
 		ctx.Header("X-Image-Id", strconv.Itoa(int(image.ID)))
 		ctx.Header("X-Processing-Time", time.Since(start).String())
+		ctx.Header("X-Hit-Count", strconv.Itoa(image.Views))
 		ctx.Data(200, "image/"+filepath.Ext(image.Name)[1:], data)
 		image.Views++
 		db.Save(&image)
