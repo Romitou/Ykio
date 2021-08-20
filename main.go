@@ -39,6 +39,7 @@ func main() {
 		}
 		file, err := ctx.FormFile("content")
 		if err != nil {
+			log.Println(err)
 			ctx.JSON(500, gin.H{
 				"error": "An internal error has occurred. Try again later!",
 			})
@@ -52,6 +53,7 @@ func main() {
 
 		err = ctx.SaveUploadedFile(file, "./images/"+image.Name)
 		if err != nil {
+			log.Println(err)
 			ctx.JSON(500, gin.H{
 				"error": "An internal error has occurred. Try again later!",
 			})
@@ -60,6 +62,7 @@ func main() {
 
 		result := db.Create(&image)
 		if result.Error != nil {
+			log.Println(err)
 			ctx.JSON(500, gin.H{
 				"error": "An internal error has occurred. Try again later!",
 			})
@@ -86,6 +89,7 @@ func main() {
 				})
 				return
 			}
+			log.Println(result.Error)
 			ctx.JSON(500, gin.H{
 				"error": "An internal error has occurred. Try again later!",
 			})
