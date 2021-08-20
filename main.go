@@ -18,8 +18,22 @@ func main() {
 	token := os.Getenv("SEND_TOKEN")
 	r := gin.Default()
 	r.GET("/", func(ctx *gin.Context) {
+
+		var imageCount int64
+		result := db.Model(&Image{}).Count(&imageCount)
+		if result.Error != nil {
+			log.Println(result.Error)
+			imageCount = -1
+		}
+
 		ctx.JSON(200, gin.H{
-			"message": "Welcome to Ykio! :)",
+			"message":    "Welcome to Ykio! :)",
+			"imageCount": strconv.Itoa(int(imageCount)),
+		})
+	})
+	r.GET("/ping", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"status": "OK",
 		})
 	})
 	r.POST("/send", func(ctx *gin.Context) {
