@@ -1,0 +1,25 @@
+name: Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build -t ghcr.io/romitou/ykio:latest .
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: docker push ghcr.io/romitou/ykio:latest
