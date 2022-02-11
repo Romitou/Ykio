@@ -1,4 +1,4 @@
-FROM alpine:3.14 AS build
+FROM alpine:3.15 AS build
 
 RUN apk add go
 
@@ -9,7 +9,7 @@ ENV GOPATH /app
 RUN go get
 RUN CGO_ENABLED=1 GOOS=linux go build -ldflags "-s -w" -o ykio
 
-FROM alpine:3.14
+FROM alpine:3.15
 
 WORKDIR /app
 COPY --from=build /app/go/ykio /app/ykio
